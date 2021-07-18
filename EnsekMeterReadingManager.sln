@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnsekMeterReadingManager", "EnsekMeterReadingManager\EnsekMeterReadingManager.csproj", "{ABE244AA-C6CF-4271-B9AF-FE30B6FEF3BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnsekMeterReadingManager", "EnsekMeterReadingManager\EnsekMeterReadingManager.csproj", "{ABE244AA-C6CF-4271-B9AF-FE30B6FEF3BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0EE0DE6-86D3-4EEB-BE6F-B11235AE8385}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnsekMeterReadingManagerTests", "EnsekMeterReadingManagerTests\EnsekMeterReadingManagerTests.csproj", "{2EC8FAA5-8789-4872-847A-3FAB725DC073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,10 @@ Global
 		{ABE244AA-C6CF-4271-B9AF-FE30B6FEF3BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE244AA-C6CF-4271-B9AF-FE30B6FEF3BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE244AA-C6CF-4271-B9AF-FE30B6FEF3BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EC8FAA5-8789-4872-847A-3FAB725DC073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EC8FAA5-8789-4872-847A-3FAB725DC073}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EC8FAA5-8789-4872-847A-3FAB725DC073}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EC8FAA5-8789-4872-847A-3FAB725DC073}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
