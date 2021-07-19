@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+
+using System;
 
 namespace EnsekMeterReadingManager.Models
 {
+    [Index(nameof(AccountId), nameof(MeterReadingDateTime), IsUnique = true)]
     public class MeterReading
     {
         public int MeterReadingId { get; set; }
