@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace EnsekMeterReadingManager.Models
 {
     public class MeterReadingDtoConverter
     {
+        private static readonly string MeterReadingDateFormat = "dd/MM/yyyy HH:mm";
+        private static readonly string MeterReadingNumericRegex = @"\A\d{5}\z";
+
         public ConversionResult<MeterReading> Convert(MeterReadingDto meterReadingDto)
         {
             var conversionResult = new ConversionResult<MeterReading>();
             conversionResult.Result = new MeterReading();
 
-            if (DateTime.TryParseExact(
-                meterReadingDto.MeterReadingDateTime,
-                "dd/MM/yyyy HH:mm",
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out DateTime result))
+            if (TryParseMeterReadingDate(meterReadingDto.MeterReadingDateTime, out DateTime result))
             {
                 conversionResult.Result.MeterReadingDateTime = result;
             }
@@ -29,7 +24,7 @@ namespace EnsekMeterReadingManager.Models
                     $"The value {meterReadingDto.MeterReadingDateTime} was not a recognised date-time");
             }
 
-            if (Regex.IsMatch(meterReadingDto.MeterReadValue.ToString(), @"\A\d{5}\z", RegexOptions.None, TimeSpan.FromSeconds(10)))
+            if (MatchMeterReadingNumericRegex(meterReadingDto.MeterReadValue))
             {
                 conversionResult.Result.MeterReadValue = meterReadingDto.MeterReadValue;
             }
@@ -41,6 +36,25 @@ namespace EnsekMeterReadingManager.Models
 
             conversionResult.Result.AccountId = meterReadingDto.AccountId;
             return conversionResult;
+        }
+
+        private static bool TryParseMeterReadingDate(string meterReadingDateTime, out DateTime result)
+        {
+            return DateTime.TryParseExact(
+                meterReadingDateTime,
+                MeterReadingDateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out result);
+        }
+
+        private static bool MatchMeterReadingNumericRegex(int meterReadValue)
+        {
+            return Regex.IsMatch(
+                meterReadValue.ToString(),
+                MeterReadingNumericRegex,
+                RegexOptions.None,
+                TimeSpan.FromSeconds(10));
         }
     }
 }
