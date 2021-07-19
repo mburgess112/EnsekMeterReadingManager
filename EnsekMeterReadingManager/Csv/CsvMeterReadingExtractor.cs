@@ -37,7 +37,7 @@ namespace EnsekMeterReadingManager.Csv
             return batchResult;
         }
 
-        private ConversionResult<MeterReadingDto> GetMeterReadingDto(CsvReader csv)
+        private static ConversionResult<MeterReadingDto> GetMeterReadingDto(CsvReader csv)
         {
             var result = new ConversionResult<MeterReadingDto>();
             try

@@ -65,8 +65,9 @@ namespace EnsekMeterReadingManagerTests.DataAccess
             Assert.That(success, Is.False);
         }
 
+        //TODO: investigate failing test
         [Test]
-        [Ignore("TODO: Test fails when running against Sqlite, despite equivalent functionality working on Sql Server")]
+        [Ignore("Test fails when running against Sqlite, despite equivalent functionality working on Sql Server")]
         public void SaveMeterReading_DuplicateEntryForAccount_ShouldReturnFalse()
         {
             var validReading = new MeterReading

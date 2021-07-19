@@ -14,6 +14,7 @@ namespace EnsekMeterReadingManager.Controllers
     [ApiController]
     public class MeterReadingsController : ControllerBase
     {
+        // TODO: update the scaffolded CRUD here to use the DTO and repository logic - remove a dependency, and avoid awkward overposting
         private readonly EnsekDbContext _context;
         private readonly CsvMeterReadingExtractor _csvMeterReadingExtractor;
         private readonly MeterReadingDtoConverter _meterReadingDtoConverter;
@@ -119,6 +120,8 @@ namespace EnsekMeterReadingManager.Controllers
                 return BadRequest("A valid CSV file must be provided");
             }
 
+            // TODO: it'd be worth moving this whole sequence to a facade/service class 
+            // Easier testing of the controller, and means we can trigger with files retrieved through other means
             var result = new BatchResult();
             var extractedReadings = _csvMeterReadingExtractor.ExtractReadings(meterReadingCsv.OpenReadStream());
             result.FailureCount += extractedReadings.FailureCount;

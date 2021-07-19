@@ -42,6 +42,7 @@ namespace EnsekMeterReadingManager
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EnsekMeterReadingManager v1"));
+                UpdateDevDatabase(app);
             }
 
             app.UseHttpsRedirection();
@@ -54,6 +55,17 @@ namespace EnsekMeterReadingManager
             {
                 endpoints.MapControllers();
             });
+        }
+
+        // TODO: would be neater as an extension method
+        private static void UpdateDevDatabase(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope();
+            using var context = serviceScope.ServiceProvider.GetService<EnsekDbContext>();
+            context.Database.Migrate();
+            //TODO: since this is dev-only anyway, consider wiring in an import of the test account CSV
         }
     }
 }

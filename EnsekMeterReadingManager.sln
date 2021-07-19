@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LocalTesting", "LocalTestin
 	ProjectSection(SolutionItems) = preProject
 		LocalTesting\ImportTestingAccounts.sql = LocalTesting\ImportTestingAccounts.sql
 		LocalTesting\Meter_Reading.csv = LocalTesting\Meter_Reading.csv
+		LocalTesting\Test_Accounts.ods = LocalTesting\Test_Accounts.ods
 	EndProjectSection
 EndProject
 Global
