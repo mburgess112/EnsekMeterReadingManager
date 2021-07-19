@@ -121,11 +121,12 @@ namespace EnsekMeterReadingManager.Controllers
 
             var result = new BatchResult();
             var extractedReadings = _csvMeterReadingExtractor.ExtractReadings(meterReadingCsv.OpenReadStream());
+            result.FailureCount += extractedReadings.FailureCount;
 
             // TODO investigate possible performance issues around saving each row individually
             // Moderate files: some sort of bulk upload to save on database connections
             // Very large files: consider saving the CSV somewhere then processing asynchronously
-            foreach (var readingDto in extractedReadings)
+            foreach (var readingDto in extractedReadings.Results)
             {
                 var conversionResult = _meterReadingDtoConverter.Convert(readingDto);
                 if (conversionResult.IsSuccess)

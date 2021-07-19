@@ -4,6 +4,7 @@ using CsvHelper.TypeConversion;
 
 using EnsekMeterReadingManager.Models;
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -12,34 +13,43 @@ namespace EnsekMeterReadingManager.Csv
 {
     public class CsvMeterReadingExtractor
     {
-        public IEnumerable<MeterReadingDto> ExtractReadings(Stream csvFileStream)
+        public BatchConversionResult<MeterReadingDto> ExtractReadings(Stream csvFileStream)
         {
             using var streamReader = new StreamReader(csvFileStream);
             using var csv = new CsvReader(streamReader, CsvConfiguration);
 
             var list = new List<MeterReadingDto>();
+            var batchResult = new BatchConversionResult<MeterReadingDto>();
             // TODO: investigate possible performance issue when looping over large CSV files
             while (csv.Read())
             {
-                try
+                var result = GetMeterReadingDto(csv);
+                if (result.IsSuccess)
                 {
-                    var record = csv.GetRecord<MeterReadingDto>();
-                    list.Add(record);
+                    batchResult.Results.Add(result.Result);
                 }
-                catch (HeaderValidationException)
+                else
                 {
-
-                }
-                catch (MissingFieldException)
-                {
-
-                }
-                catch (TypeConverterException)
-                {
-
+                    batchResult.FailureCount++;
+                    batchResult.ErrorMessages.AddRange(result.ErrorMessages);
                 }
             }
-            return list;
+            return batchResult;
+        }
+
+        private ConversionResult<MeterReadingDto> GetMeterReadingDto(CsvReader csv)
+        {
+            var result = new ConversionResult<MeterReadingDto>();
+            try
+            {
+                var record = csv.GetRecord<MeterReadingDto>();
+                result.Result = record;
+            }
+            catch (CsvHelperException ex)
+            {
+                result.ErrorMessages.Add(ex.Message);
+            }
+            return result;
         }
 
         private readonly CsvConfiguration CsvConfiguration =

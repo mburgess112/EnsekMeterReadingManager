@@ -24,7 +24,7 @@ namespace EnsekMeterReadingManagerTests.Csv
         {
             var returnedModels = _underTest.ExtractReadings(GetStringStream(""));
 
-            Assert.That(returnedModels, Is.Empty);
+            Assert.That(returnedModels.Results, Is.Empty);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace EnsekMeterReadingManagerTests.Csv
                     MeterReadValue = 45522
                 }
             };
-            Assert.That(returnedModels, Is.EqualTo(expectedModels));
+            Assert.That(returnedModels.Results, Is.EqualTo(expectedModels));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace EnsekMeterReadingManagerTests.Csv
             using var input = GetStringStream(missingColumnCsv);
             var returnedModels = _underTest.ExtractReadings(input);
 
-            Assert.That(returnedModels, Has.Count.EqualTo(0));
+            Assert.That(returnedModels.Results, Has.Count.EqualTo(0));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace EnsekMeterReadingManagerTests.Csv
             using var input = GetStringStream(missingValueInRowCsv);
             var returnedModels = _underTest.ExtractReadings(input);
 
-            Assert.That(returnedModels, Has.Count.EqualTo(2));
+            Assert.That(returnedModels.Results, Has.Count.EqualTo(2));
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace EnsekMeterReadingManagerTests.Csv
             using var input = GetStringStream(invalidDataInRowCsv);
             var returnedModels = _underTest.ExtractReadings(input);
 
-            Assert.That(returnedModels, Has.Count.EqualTo(2));
+            Assert.That(returnedModels.Results, Has.Count.EqualTo(2));
         }
 
         private static Stream GetStringStream(string value)
