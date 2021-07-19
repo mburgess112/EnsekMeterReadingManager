@@ -31,7 +31,7 @@ namespace EnsekMeterReadingManagerTests.Csv
         public void ExtractReadings_SingleValidRow_ShouldReturnExpectedModel()
         {
             var singleRowCsv = "AccountId,MeterReadingDateTime,MeterReadValue\r\n" +
-                "2345,22/04/2019 12:25:00,45522\r\n";
+                "2345,22/04/2019 12:25,45522\r\n";
 
             using var input = GetStringStream(singleRowCsv);
             var returnedModels = _underTest.ExtractReadings(input);
@@ -41,7 +41,7 @@ namespace EnsekMeterReadingManagerTests.Csv
                 new MeterReadingDto()
                 {
                     AccountId = 2345,
-                    MeterReadingDateTime = "22/04/2019 12:25:00",
+                    MeterReadingDateTime = "22/04/2019 12:25",
                     MeterReadValue = 45522
                 }
             };
@@ -52,7 +52,7 @@ namespace EnsekMeterReadingManagerTests.Csv
         public void ExtractReadings_MissingColumn_ShouldReturnEmptyList()
         {
             var missingColumnCsv = "AccountId,MeterReadingDateTime\r\n" +
-                "2345,22/04/2019 12:25:00\r\n";
+                "2345,22/04/2019 12:25\r\n";
 
             using var input = GetStringStream(missingColumnCsv);
             var returnedModels = _underTest.ExtractReadings(input);
@@ -64,9 +64,9 @@ namespace EnsekMeterReadingManagerTests.Csv
         public void ExtractReadings_MissingValueInRow_ShouldSkipRow()
         {
             var missingValueInRowCsv = "AccountId,MeterReadingDateTime,MeterReadValue\r\n" +
-                "2345,22/04/2019 12:25:00,45522\r\n" +
-                "2349,22/04/2019  12:25:00\r\n" +
-                "2351,22/04/2019  12:25:00,57579\r\n";
+                "2345,22/04/2019 12:25,45522\r\n" +
+                "2349,22/04/2019 12:25\r\n" +
+                "2351,22/04/2019 12:25,57579\r\n";
 
             using var input = GetStringStream(missingValueInRowCsv);
             var returnedModels = _underTest.ExtractReadings(input);
@@ -78,9 +78,9 @@ namespace EnsekMeterReadingManagerTests.Csv
         public void ExtractReadings_InvalidDataInRow_ShouldSkipRow()
         {
             var invalidDataInRowCsv = "AccountId,MeterReadingDateTime,MeterReadValue\r\n" +
-                "2345,22/04/2019 12:25:00,45522\r\n" +
-                "2349,22/04/2019  12:25:00,VOID\r\n" +
-                "2351,22/04/2019  12:25:00,57579\r\n";
+                "2345,22/04/2019 12:25,45522\r\n" +
+                "2349,22/04/2019 12:25,VOID\r\n" +
+                "2351,22/04/2019 12:25,57579\r\n";
 
             using var input = GetStringStream(invalidDataInRowCsv);
             var returnedModels = _underTest.ExtractReadings(input);

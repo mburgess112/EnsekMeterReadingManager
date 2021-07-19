@@ -17,15 +17,8 @@ namespace EnsekMeterReadingManager.Models
             this._ensekDbContext = ensekDbContext;
         }
 
-        public bool SaveMeterReading(MeterReadingDto meterReadingDto)
+        public bool SaveMeterReading(MeterReading meterReading)
         {
-            var meterReading = new MeterReading()
-            {
-                AccountId = meterReadingDto.AccountId,
-                MeterReadingDateTime = DateTime.ParseExact(meterReadingDto.MeterReadingDateTime, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
-                MeterReadValue = meterReadingDto.MeterReadValue
-            };
-
             _ensekDbContext.MeterReadings.Add(meterReading);
 
             try
@@ -38,24 +31,6 @@ namespace EnsekMeterReadingManager.Models
             }
 
             return true;
-        }
-
-        public BatchResult SaveMeterReadingBatch(IEnumerable<MeterReadingDto> meterReadings)
-        {
-            var batchResult = new BatchResult();
-            foreach (MeterReadingDto reading in meterReadings)
-            {
-                var success = SaveMeterReading(reading);
-                if (success)
-                {
-                    batchResult.SuccessCount++;
-                }
-                else
-                {
-                    batchResult.FailureCount++;
-                }
-            }
-            return batchResult;
         }
     }
 }

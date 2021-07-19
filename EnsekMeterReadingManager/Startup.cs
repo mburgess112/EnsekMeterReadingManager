@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using EnsekMeterReadingManager.Csv;
 
 namespace EnsekMeterReadingManager
 {
@@ -21,6 +22,10 @@ namespace EnsekMeterReadingManager
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<CsvMeterReadingExtractor>();
+            services.AddSingleton<MeterReadingDtoConverter>();
+            services.AddScoped<MeterReadingRepository>();
+
             services.AddDbContext<EnsekDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("EnsekConnection")));
             services.AddControllers();

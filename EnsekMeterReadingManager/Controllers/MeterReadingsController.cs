@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EnsekMeterReadingManager.Models;
+using EnsekMeterReadingManager.Csv;
 
 namespace EnsekMeterReadingManager.Controllers
 {
@@ -14,10 +15,20 @@ namespace EnsekMeterReadingManager.Controllers
     public class MeterReadingsController : ControllerBase
     {
         private readonly EnsekDbContext _context;
+        private readonly CsvMeterReadingExtractor _csvMeterReadingExtractor;
+        private readonly MeterReadingDtoConverter _meterReadingDtoConverter;
+        private readonly MeterReadingRepository _meterReadingRepository;
 
-        public MeterReadingsController(EnsekDbContext context)
+        public MeterReadingsController(
+            EnsekDbContext context,
+            CsvMeterReadingExtractor csvMeterReadingExtractor,
+            MeterReadingDtoConverter meterReadingDtoConverter,
+            MeterReadingRepository meterReadingRepository)
         {
             _context = context;
+            _csvMeterReadingExtractor = csvMeterReadingExtractor;
+            _meterReadingDtoConverter = meterReadingDtoConverter;
+            _meterReadingRepository = meterReadingRepository;
         }
 
         // GET: api/MeterReadings
@@ -97,6 +108,39 @@ namespace EnsekMeterReadingManager.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpPost("meter-reading-uploads")]
+        public ActionResult<BatchResult> UploadMeterReadingCsv(IFormFile meterReadingCsv)
+        {
+            // TODO: consider if more detailed file validation is useful before attempting to read
+            if (meterReadingCsv == null)
+            {
+                return BadRequest("A valid CSV file must be provided");
+            }
+
+            var result = new BatchResult();
+            var extractedReadings = _csvMeterReadingExtractor.ExtractReadings(meterReadingCsv.OpenReadStream());
+
+            // TODO investigate possible performance issues around saving each row individually
+            // Moderate files: some sort of bulk upload to save on database connections
+            // Very large files: consider saving the CSV somewhere then processing asynchronously
+            foreach (var readingDto in extractedReadings)
+            {
+                var conversionResult = _meterReadingDtoConverter.Convert(readingDto);
+                if (conversionResult.IsSuccess)
+                {
+                    var isSaved = _meterReadingRepository.SaveMeterReading(conversionResult.Result);
+                    if (isSaved)
+                    {
+                        result.SuccessCount++;
+                        continue;
+                    }
+                }
+                result.FailureCount++;
+            }
+
+            return result;
         }
 
         private bool MeterReadingExists(int id)

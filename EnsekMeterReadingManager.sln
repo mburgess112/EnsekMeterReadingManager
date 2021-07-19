@@ -10,7 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnsekMeterReadingManagerTests", "EnsekMeterReadingManagerTests\EnsekMeterReadingManagerTests.csproj", "{2EC8FAA5-8789-4872-847A-3FAB725DC073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnsekMeterReadingManagerTests", "EnsekMeterReadingManagerTests\EnsekMeterReadingManagerTests.csproj", "{2EC8FAA5-8789-4872-847A-3FAB725DC073}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LocalTesting", "LocalTesting", "{5F1ABCBD-51AF-4F80-9359-35EDFBDD723A}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTesting\ImportTestingAccounts.sql = LocalTesting\ImportTestingAccounts.sql
+		LocalTesting\Meter_Reading.csv = LocalTesting\Meter_Reading.csv
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
